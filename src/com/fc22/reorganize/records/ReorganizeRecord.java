@@ -22,10 +22,18 @@ public class ReorganizeRecord {
     final File[] files = file.listFiles();
     assert files != null;
     System.out.println(files.length);
-    final String regex = "(.+)_(20\\d{12}.m4a)";
+    final String regex = "(.+)_(20\\d{12}\\..+)";
     final Pattern compile = Pattern.compile(regex);
     Map<String, List<String>> multimap = new HashMap<>();
-    Arrays.stream(files).filter(File::isFile).map(File::getName).filter(s -> s.endsWith(".m4a")).filter(s -> s.contains("_"))
+    Arrays.stream(files).filter(File::isFile).map(File::getName).filter(
+            s ->
+                s.toLowerCase().endsWith(".m4a")
+                    || s.toLowerCase().endsWith(".amr")
+                    || s.toLowerCase().endsWith(".aac")
+                    || s.toLowerCase().endsWith(".wav")
+                    || s.toLowerCase().endsWith(".mp3")
+                    || s.toLowerCase().endsWith(".mp4")
+        ).filter(s -> s.contains("_"))
         .filter(s -> s.matches(regex)).forEach(s -> {
           final Matcher matcher = compile.matcher(s);
           if (matcher.find()) {
